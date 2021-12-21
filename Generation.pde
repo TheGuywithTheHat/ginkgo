@@ -1,6 +1,8 @@
-PShape createBranch(PVector direction) {
-  int radius = 30;
-  
+PShape createBranch(PMatrix3D origin, int len) {
+  float radius = 30;
+  float spacing = 5;
+  float stemDist = 50;
+  len /= spacing;
   
   
   PShape b = createShape();
@@ -8,20 +10,43 @@ PShape createBranch(PVector direction) {
   
   b.fill(color(256, 212, 30));
   
-  for(int i = 0; i < 100; i += 10) {
-    b.vertex(30, 0, i);
-    //b.rotateZ(PI * 2 / 3 / 10);
-    b.vertex(30, 30, i);
-    //b.rotateZ(PI * 2 / 3 / 10);
-    b.vertex(0, 30, i);
-    //b.rotateZ(-PI * 4 / 3 / 10);
-    b.rotateX(0.01);
+  PMatrix3D frontier = origin.get();
+  PMatrix3D curve = new PMatrix3D();
+  
+  PVector leafVec = new PVector(-radius, 0, 0);
+  PVector tempVec = new PVector();
+  PVector nextVert;
+  
+  for(int i = 0; i < len; i++) {
+    curve.rotateZ(random(PI * 2));
+    curve.rotateX(random(0.008));
+    frontier.apply(curve);
+    frontier.translate(0, 0, -spacing);
+    PMatrix3D leafMat = frontier.get();
+    leafMat.rotateZ(random(PI * 2));
+    leafMat.translate(stemDist, 0, 0);
+    leafMat.rotateX((random(1) - 0.5) * 2);
+    leafMat.rotateY((random(1)) / 2);
+    
+    nextVert = leafMat.mult(leafVec, tempVec);
+    b.vertex(nextVert.x, nextVert.y, nextVert.z);
+    leafMat.rotateZ(PI * 2 / 3);
+    
+    nextVert = leafMat.mult(leafVec, tempVec);
+    b.vertex(nextVert.x, nextVert.y, nextVert.z);
+    leafMat.rotateZ(PI * 2 / 3);
+    
+    nextVert = leafMat.mult(leafVec, tempVec);
+    b.vertex(nextVert.x, nextVert.y, nextVert.z);
+    leafMat.rotateZ(PI * 2 / 3);
   }
   
   b.endShape();
   return b;
 }
 
+// doesn't work
+/*
 PVector randomRotateVector(PVector original, float amount) {
   original = original.normalize();
   PVector unitZ = new PVector(0, 0, 1);
@@ -41,3 +66,4 @@ PVector randomRotateVector(PVector original, float amount) {
   
   return original;
 }
+*/

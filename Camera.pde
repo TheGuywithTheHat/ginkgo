@@ -20,7 +20,7 @@ void mouseWheel(MouseEvent event) {
 }
 
 void setCamera() {
-  camera(-1000, 0, 0, 0, 0, 0, 0, 0, 1);
+  camera(-1, 0, 0, 0, 0, 0, 0, 0, 1);
 }
 
 void resetCamera() {
@@ -28,7 +28,9 @@ void resetCamera() {
 }
 
 void cameraMatrix() {
+  translate(1000, 0, 0);
   rotateY(elevation);
   rotateZ(angle);
   scale(exp(zoom));
+  translate(0, 0, 2000);
 }
