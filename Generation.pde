@@ -3,11 +3,11 @@ PShape createBranch(PMatrix3D origin, float len, float stickRadius) {
   float spacing = 5;
   float stemDist = 50;
   float stickSpacing = 200;
-  float stickRadFalloff = 0.92;
+  float stickRadFalloff = 0.85;
   int stickSides = 5;
   
-  color lightColor = color(256, 212, 30);
-  color darkColor = color(140, 122, 10);
+  color lightColor = color(256, 192, 30);
+  color darkColor = color(140, 108, 10);
   
   PShape b = createShape(GROUP); // branch
   PShape s; // stick
@@ -39,7 +39,7 @@ PShape createBranch(PMatrix3D origin, float len, float stickRadius) {
     // draw leaves
     PMatrix3D leafMat = frontier.get();
     leafMat.rotateZ(random(PI * 2));
-    leafMat.translate(stemDist, 0, 0);
+    leafMat.translate(stemDist + stickRadius, 0, 0);
     leafMat.rotateX((random(1) - 0.5) * 2);
     leafMat.rotateY((random(1)) / 2);
     
@@ -56,11 +56,10 @@ PShape createBranch(PMatrix3D origin, float len, float stickRadius) {
     if(currLen - lastStickLen >= stickSpacing || currLen + spacing >= len) {
       s = createShape();
       s.beginShape(TRIANGLE_STRIP);
-      s.fill(color(31, 21, 15));
+      s.fill(color(54, 39, 27));
+      //s.fill(color(200));
       
       PMatrix3D currStickMat = frontier.get();
-      lastStickMat.translate(radius, 0, 0);
-      currStickMat.translate(radius * stickRadFalloff, 0, 0);
       
       if(shouldOffset) {
         currStickMat.rotateZ(TWO_PI / stickSides / 2);
@@ -73,18 +72,21 @@ PShape createBranch(PMatrix3D origin, float len, float stickRadius) {
       
       for(int i = 0; i <= stickSides; i++) {
         nextVert = lastStickMat.mult(lastStickVec, tempVec);
-        l.vertex(nextVert.x, nextVert.y, nextVert.z);
+        s.vertex(nextVert.x, nextVert.y, nextVert.z);
         lastStickMat.rotateZ(TWO_PI / stickSides);
         
         nextVert = currStickMat.mult(currStickVec, tempVec);
-        l.vertex(nextVert.x, nextVert.y, nextVert.z);
+        s.vertex(nextVert.x, nextVert.y, nextVert.z);
         currStickMat.rotateZ(TWO_PI / stickSides);
       }
-    }
+      s.endShape();
+      b.addChild(s);
     
-    shouldOffset = !shouldOffset;
-    lastStickLen = currLen;
-    stickRadius *= stickRadFalloff;
+      shouldOffset = !shouldOffset;
+      lastStickLen = currLen;
+      stickRadius *= stickRadFalloff;
+      lastStickMat = frontier.get();
+    }
   }
   
   l.endShape();
