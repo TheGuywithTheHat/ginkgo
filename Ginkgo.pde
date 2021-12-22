@@ -14,7 +14,7 @@ void setup() {
   PVector r = PVector.random3D();
   
   for(int i = 0; i < 100; i++) {
-    branches.add(createBranch(new PMatrix3D(), 4000));
+    branches.add(createBranch(new PMatrix3D(), 4000, 50));
   }
 }
 
