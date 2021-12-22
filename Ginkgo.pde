@@ -25,9 +25,10 @@ void draw() {
   cameraMatrix();
   
   
-  ambientLight(158, 168, 178);
-  directionalLight(138, 128, 118, 0.5, -0.3, 1);
-  directionalLight(38, 28, 18, -0.5, 0.3, -1);
+  ambientLight(178, 188, 198);
+  //directionalLight(138, 128, 118, 0.5, -0.3, 1);
+  directionalLight(88, 78, 68, 0.5, -0.3, 1);
+  directionalLight(58, 48, 38, -0.5, 0.3, -1);
   
   fill(256, 212, 30);
   box(100);

@@ -5,7 +5,7 @@ PShape createBranch(PMatrix3D origin, int len) {
   len /= spacing;
   
   color lightColor = color(256, 212, 30);
-  color darkColor = color(0, 182, 10);
+  color darkColor = color(140, 122, 10);
   
   
   PShape b = createShape();
@@ -20,7 +20,7 @@ PShape createBranch(PMatrix3D origin, int len) {
   PVector tempVec = new PVector();
   PVector nextVert;
   
-  PVector centerVec = new PVector(0, 0, 1000);
+  PVector centerVec = new PVector(0, 0, -1500);
   
   for(int i = 0; i < len; i++) {
     curve.rotateZ(random(PI * 2));
@@ -38,7 +38,7 @@ PShape createBranch(PMatrix3D origin, int len) {
     for(int j = 0; j < 3; j++) {
       nextVert = leafMat.mult(leafVec, tempVec);
       dist = centerVec.dist(nextVert);
-      b.fill(lerpColor(darkColor, lightColor, dist / 1000));
+      b.fill(lerpColor(darkColor, lightColor, dist / 2000));
       b.vertex(nextVert.x, nextVert.y, nextVert.z);
       leafMat.rotateZ(PI * 2 / 3);
     }
