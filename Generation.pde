@@ -20,7 +20,6 @@ PShape createBranch(PMatrix3D origin, float len, float stickRadius) {
   PMatrix3D lastStickMat = frontier.get();
   float lastStickLen = 0;
   boolean shouldOffset = false;
-  PMatrix3D curve = new PMatrix3D();
   
   PVector leafVec = new PVector(-radius, 0, 0);
   PVector tempVec = new PVector();
@@ -31,9 +30,10 @@ PShape createBranch(PMatrix3D origin, float len, float stickRadius) {
   for(float currLen = 0; currLen < len; currLen += spacing) {
     
     // update frontier
-    curve.rotateZ(random(PI * 2));
-    curve.rotateX(random(0.008));
-    frontier.apply(curve);
+    float rotation = random(PI * 2);
+    frontier.rotateZ(rotation);
+    frontier.rotateY(random(0.08));
+    frontier.rotateZ(-rotation);
     frontier.translate(0, 0, -spacing);
     
     // draw leaves
