@@ -4,11 +4,14 @@ PShape createBranch(PMatrix3D origin, int len) {
   float stemDist = 50;
   len /= spacing;
   
+  color lightColor = color(256, 212, 30);
+  color darkColor = color(0, 182, 10);
+  
   
   PShape b = createShape();
   b.beginShape(TRIANGLES);
   
-  b.fill(color(256, 212, 30));
+  b.fill(lightColor);
   
   PMatrix3D frontier = origin.get();
   PMatrix3D curve = new PMatrix3D();
@@ -16,6 +19,8 @@ PShape createBranch(PMatrix3D origin, int len) {
   PVector leafVec = new PVector(-radius, 0, 0);
   PVector tempVec = new PVector();
   PVector nextVert;
+  
+  PVector centerVec = new PVector(0, 0, 1000);
   
   for(int i = 0; i < len; i++) {
     curve.rotateZ(random(PI * 2));
@@ -28,17 +33,15 @@ PShape createBranch(PMatrix3D origin, int len) {
     leafMat.rotateX((random(1) - 0.5) * 2);
     leafMat.rotateY((random(1)) / 2);
     
-    nextVert = leafMat.mult(leafVec, tempVec);
-    b.vertex(nextVert.x, nextVert.y, nextVert.z);
-    leafMat.rotateZ(PI * 2 / 3);
+    float dist = 0;
     
-    nextVert = leafMat.mult(leafVec, tempVec);
-    b.vertex(nextVert.x, nextVert.y, nextVert.z);
-    leafMat.rotateZ(PI * 2 / 3);
-    
-    nextVert = leafMat.mult(leafVec, tempVec);
-    b.vertex(nextVert.x, nextVert.y, nextVert.z);
-    leafMat.rotateZ(PI * 2 / 3);
+    for(int j = 0; j < 3; j++) {
+      nextVert = leafMat.mult(leafVec, tempVec);
+      dist = centerVec.dist(nextVert);
+      b.fill(lerpColor(darkColor, lightColor, dist / 1000));
+      b.vertex(nextVert.x, nextVert.y, nextVert.z);
+      leafMat.rotateZ(PI * 2 / 3);
+    }
   }
   
   b.endShape();
